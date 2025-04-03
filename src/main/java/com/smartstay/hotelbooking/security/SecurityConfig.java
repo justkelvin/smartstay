@@ -58,6 +58,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .cors(cors -> cors.configure(http)) // Enable CORS
                 .csrf(csrf -> csrf.disable())
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -68,12 +69,16 @@ public class SecurityConfig {
                         .requestMatchers("/api/rooms/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/hotels/*/reviews").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/rooms/available").permitAll()
+                        .requestMatchers("/h2-console/**").permitAll() // Allow H2 console access
 
                         // Admin endpoints
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
                         // Protected endpoints
                         .anyRequest().authenticated());
+
+        // For H2 console
+        http.headers(headers -> headers.frameOptions().disable());
 
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
