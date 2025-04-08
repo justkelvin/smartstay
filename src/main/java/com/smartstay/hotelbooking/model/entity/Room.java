@@ -43,7 +43,9 @@ public class Room extends BaseEntity {
     @JoinColumn(name = "hotel_id", nullable = false)
     private Hotel hotel;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    // @ManyToOne(fetch = FetchType.LAZY)
+    // TODO: IMPLIMENTATION OF LAZY FETCHING
+    @ManyToOne(fetch = FetchType.EAGER) 
     @JoinColumn(name = "room_type_id", nullable = false)
     private RoomType roomType;
 
