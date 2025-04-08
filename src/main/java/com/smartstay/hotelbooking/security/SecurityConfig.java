@@ -70,6 +70,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/hotels/*/reviews").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/rooms/available").permitAll()
                         .requestMatchers("/h2-console/**").permitAll() // Allow H2 console access
+                        .requestMatchers("/api/test").permitAll()
 
                         // Admin endpoints
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
@@ -78,7 +79,8 @@ public class SecurityConfig {
                         .anyRequest().authenticated());
 
         // For H2 console
-        http.headers(headers -> headers.frameOptions().disable());
+        // http.headers(headers -> headers.frameOptions().disable());
+        http.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()));
 
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
